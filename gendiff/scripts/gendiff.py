@@ -17,7 +17,7 @@ def generate_diff(file_path1, file_path2):
     json1 = json.load(open(file_path1))
     json2 = json.load(open(file_path2))
     for key1, value1 in sorted(json1.items()):
-        for key2, value2 in sorted(json2.items()):
+        for key2, value2 in sorted(json.items()):
             if value1 != json2[key1]:
                 res += "  "
     res += "\n}  "
