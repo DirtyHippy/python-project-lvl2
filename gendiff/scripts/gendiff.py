@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import argparse
 import json
-from collections import OrderedDict
 
 
 def main():
@@ -14,13 +13,15 @@ def main():
 
 
 def generate_diff(file_path1, file_path2):
-    res = OrderedDict()
+    res = "{\n"
     json1 = json.load(open(file_path1))
     json2 = json.load(open(file_path2))
     for key1, value1 in sorted(json1.items()):
-        if json2.get(key1):
-            pass
-    return ''
+        for key2, value2 in sorted(json2.items()):
+            if value1 != json2[key1]:
+                res += "  "
+    res += "\n}  "
+    return res
 
 
 if __name__ == '__main__':
