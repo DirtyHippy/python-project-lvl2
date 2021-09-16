@@ -9,6 +9,3 @@ def test_generate_diff():
             test_dir + "/fixtures/file1.json",
             test_dir + "/fixtures/file2.json",
         ) == test1.read()
-
-
-test_generate_diff()
