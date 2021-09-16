@@ -15,3 +15,4 @@ package-install:
 
 lint:
 	poetry run flake8 gendiff
+	poetry run mypy gendiff

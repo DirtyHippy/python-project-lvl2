@@ -16,6 +16,7 @@ flake8 = "^3.9.2"
 autopep8 = "^1.5.7"
 ipython = "^7.27.0"
 pytest = "^6.2.5"
+mypy = "^0.910"
 
 [tool.poetry.scripts]
 gendiff = "gendiff.scripts.gendiff:main"

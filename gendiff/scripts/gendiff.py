@@ -12,15 +12,27 @@ def main():
     print(args.accumulate(args))
 
 
-def generate_diff(file_path1, file_path2):
+def generate_diff(file_path1: str, file_path2: str) -> str:
     res = "{\n"
-    json1 = json.load(open(file_path1))
-    json2 = json.load(open(file_path2))
-    for key1, value1 in sorted(json1.items()):
-        for key2, value2 in sorted(json.items()):
-            if value1 != json2[key1]:
-                res += "  "
-    res += "\n}  "
+    values = list()
+    with open(file_path1, "r") as file1:
+        json1: dict = json.load(file1)
+    with open(file_path2, "r") as file2:
+        json2: dict = json.load(file2)
+    keys = sorted(set(list(json1.keys()) + list(json2.keys())))
+    for key in keys:
+        if key in json1 and key in json2:
+            if json1[key] != json2[key]:
+                values.append("- {}: {}\n".format(key, json1[key]))
+                values.append("+ {}: {}\n".format(key, json2[key]))
+            else:
+                values.append("  {}: {}\n".format(key, json1[key]))
+        elif key in json1:
+            values.append("- {}: {}\n".format(key, json1[key]))
+        else:
+            values.append("+ {}: {}\n".format(key, json2[key]))
+    res += "  " + "  ".join(values)
+    res += "}"
     return res
 
 
