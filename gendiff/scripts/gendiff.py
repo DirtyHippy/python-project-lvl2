@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import argparse
 import json
+import yaml
+from gendiff.core.comparator import compare
+from typing import Tuple
 
 
 def main():
@@ -12,28 +15,28 @@ def main():
     print(args.accumulate(args))
 
 
-def generate_diff(file_path1: str, file_path2: str) -> str:
-    res = "{\n"
-    values = list()
+def load_json(file_path1: str, file_path2: str) -> Tuple[dict, dict]:
     with open(file_path1, "r") as file1:
         json1: dict = json.load(file1)
     with open(file_path2, "r") as file2:
         json2: dict = json.load(file2)
-    keys = sorted(set(list(json1.keys()) + list(json2.keys())))
-    for key in keys:
-        if key in json1 and key in json2:
-            if json1[key] != json2[key]:
-                values.append("- {}: {}\n".format(key, json1[key]))
-                values.append("+ {}: {}\n".format(key, json2[key]))
-            else:
-                values.append("  {}: {}\n".format(key, json1[key]))
-        elif key in json1:
-            values.append("- {}: {}\n".format(key, json1[key]))
-        else:
-            values.append("+ {}: {}\n".format(key, json2[key]))
-    res += "  " + "  ".join(values)
-    res += "}"
-    return res
+    return json1, json2
+
+
+def load_yaml(file_path1: str, file_path2: str) -> Tuple[dict, dict]:
+    with open(file_path1, "r") as file1:
+        yml1: dict = yaml.safe_load(file1)
+    with open(file_path2, "r") as file2:
+        yml2: dict = yaml.safe_load(file2)
+    return yml1, yml2
+
+
+def generate_diff(file_path1: str, file_path2: str) -> str:
+    if file_path1.endswith(".json"):
+        return compare(*load_json(file_path1, file_path2))
+    elif file_path1.endswith(".yml") or file_path1.endswith(".yaml"):
+        return compare(*load_yaml(file_path1, file_path2))
+    return ""
 
 
 if __name__ == '__main__':
