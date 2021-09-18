@@ -26,7 +26,7 @@ def generate_diff(file_path1: str, file_path2: str) -> str:
                 values.append("- {}: {}\n".format(key, json1[key]))
                 values.append("+ {}: {}\n".format(key, json2[key]))
             else:
-                values.append("  {}: {}\n".format(key, json2[key]))
+                values.append("  {}: {}\n".format(key, json1[key]))
         elif key in json1:
             values.append("- {}: {}\n".format(key, json1[key]))
         else:
