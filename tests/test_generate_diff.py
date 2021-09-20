@@ -16,13 +16,13 @@ def read(file_path):
 
 plain_json1 = get_fixture_path('plain1.json')
 plain_json2 = get_fixture_path('plain2.json')
-plain_yaml1 = get_fixture_path('plain1.yml')
-plain_yaml2 = get_fixture_path('plain2.yml')
-plain_expected = get_fixture_path('nested_expected.txt')
+plain_yml1 = get_fixture_path('plain1.yml')
+plain_yml2 = get_fixture_path('plain2.yml')
+plain_expected = get_fixture_path('plain_expected.txt')
 plain_expected_value = read(plain_expected)
 
 
 @pytest.mark.parametrize("file1, file2", [(plain_json1, plain_json2),
-                                          (plain_yaml1, plain_yaml2)])
+                                          (plain_yml1, plain_yml2)])
 def test_plain(file1, file2):
     assert plain_expected_value == generate_diff(file1, file2)
