@@ -15,27 +15,17 @@ def main():
     print(args.accumulate(args))
 
 
-def load_json(file_path1: str, file_path2: str) -> Tuple[dict, dict]:
-    with open(file_path1, "r") as file1:
-        json1: dict = json.load(file1)
-    with open(file_path2, "r") as file2:
-        json2: dict = json.load(file2)
-    return json1, json2
+def load_files(file1: str, file2: str, load_func) -> Tuple[dict, dict]:
+    with open(file1, "r") as f1:
+        with open(file2, "r") as f2:
+            return load_func(f1), load_func(f2)
 
 
-def load_yaml(file_path1: str, file_path2: str) -> Tuple[dict, dict]:
-    with open(file_path1, "r") as file1:
-        yml1: dict = yaml.safe_load(file1)
-    with open(file_path2, "r") as file2:
-        yml2: dict = yaml.safe_load(file2)
-    return yml1, yml2
-
-
-def generate_diff(file_path1: str, file_path2: str) -> str:
-    if file_path1.endswith(".json"):
-        return compare(*load_json(file_path1, file_path2))
-    elif file_path1.endswith(".yml") or file_path1.endswith(".yaml"):
-        return compare(*load_yaml(file_path1, file_path2))
+def generate_diff(file1: str, file2: str) -> str:
+    if file1.endswith(".json"):
+        return compare(*load_files(file1, file2, json.load))
+    elif file1.endswith(".yml") or file1.endswith(".yaml"):
+        return compare(*load_files(file1, file2, yaml.safe_load))
     return ""
 
 
