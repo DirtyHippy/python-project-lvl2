@@ -3,6 +3,7 @@ import argparse
 import json
 import yaml
 from gendiff.core.comparator import compare_dictionaries
+from gendiff.output import plain, stylish
 from typing import Tuple, Union
 
 
@@ -23,12 +24,20 @@ def load_files(file1: str, file2: str, load_func) -> Tuple[dict, dict]:
             return load_func(f1), load_func(f2)
 
 
-def generate_diff(file1: str, file2: str) -> Union[str, None]:
+def show_diff(difference: dict, format: str) -> str:
+    if format == 'plain':
+        return plain.stringify(difference)
+    return stylish.stringify(difference)
+
+
+def generate_diff(file1: str, file2: str, format='') -> Union[str, None]:
     if file1.endswith(".json"):
-        return compare_dictionaries(*load_files(file1, file2, json.load))
+        difference = compare_dictionaries(
+            *load_files(file1, file2, json.load))
     elif file1.endswith(".yml") or file1.endswith(".yaml"):
-        return compare_dictionaries(*load_files(file1, file2, yaml.safe_load))
-    return None
+        difference = compare_dictionaries(
+            *load_files(file1, file2, yaml.safe_load))
+    return show_diff(difference, format)
 
 
 if __name__ == '__main__':

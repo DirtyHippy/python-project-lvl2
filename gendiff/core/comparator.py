@@ -1,14 +1,18 @@
+from typing import Dict
+
+
 REMOVED = 'removed'
 UPDATED = 'updated'
 ADDED = 'added'
 EQUAL = 'equal'
 
+result: Dict[str, dict]
 result = {}
 
 
 def compare_dictionaries(dict_1: dict,  # noqa: C901
                          dict_2: dict,
-                         path="") -> dict:
+                         path="") -> Dict[str, dict]:
     orig_path = path
     for k in dict_1.keys():
         path = orig_path + f"[{k}]"
@@ -24,7 +28,7 @@ def compare_dictionaries(dict_1: dict,  # noqa: C901
                 else:
                     result.setdefault(EQUAL, dict())[path] = dict_1[k]
     for k in dict_2.keys():
-        path = orig_path + f"{k}"
+        path = orig_path + f"[{k}]"
         if k not in dict_1:
             result.setdefault(ADDED, dict())[path] = dict_2[k]
     return result
