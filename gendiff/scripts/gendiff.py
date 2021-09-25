@@ -2,7 +2,7 @@
 import argparse
 import json
 import yaml
-from gendiff.core.comparator import compare
+from gendiff.core.comparator import compare_dictionaries
 from typing import Tuple, Union
 
 
@@ -10,9 +10,11 @@ def main():
     parser = argparse.ArgumentParser(description='Generate diff')
     parser.add_argument('first_file', type=str)
     parser.add_argument('second_file', type=str)
-    parser.add_argument('-f', '--FORMAT', help='set format of output')
+    parser.add_argument('-f', '--format', help='set format of output')
     args = parser.parse_args()
-    print(args.accumulate(args))
+    return generate_diff(args['first_file'],
+                         args['second_file'],
+                         args['format'])
 
 
 def load_files(file1: str, file2: str, load_func) -> Tuple[dict, dict]:
@@ -23,9 +25,9 @@ def load_files(file1: str, file2: str, load_func) -> Tuple[dict, dict]:
 
 def generate_diff(file1: str, file2: str) -> Union[str, None]:
     if file1.endswith(".json"):
-        return compare(*load_files(file1, file2, json.load))
+        return compare_dictionaries(*load_files(file1, file2, json.load))
     elif file1.endswith(".yml") or file1.endswith(".yaml"):
-        return compare(*load_files(file1, file2, yaml.safe_load))
+        return compare_dictionaries(*load_files(file1, file2, yaml.safe_load))
     return None
 
 
