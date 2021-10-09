@@ -18,5 +18,5 @@ def stringify(difference: dict) -> str:  # noqa: C901
             if line:
                 result.append(line)
             result.sort()
-    result = map(lambda line: 'Property ' + line, result)
+    result = map(lambda line: 'Property ' + line, result)  # type: ignore
     return '\n'.join(result)
