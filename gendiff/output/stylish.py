@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from typing import Dict, Any
 
 
 def format_value(value):
@@ -47,7 +46,7 @@ def get_sorted_keys(difference: dict) -> list:
     return list_keys
 
 
-def create_dict_format(difference: dict):  # noqa: C901
+def create_dict_format(difference: dict) -> dict:  # noqa: C901
     result = OrderedDict()
     list_keys = get_sorted_keys(difference)
     for key in list_keys:
@@ -68,7 +67,7 @@ def create_dict_format(difference: dict):  # noqa: C901
                 if el not in result:
                     result[el] = value
                     if second_sigh != '':
-                        result[el2] = second_value
+                        result[el2] = second_value  # type: ignore
                 prev = result[el]
             else:
                 if el not in prev:
