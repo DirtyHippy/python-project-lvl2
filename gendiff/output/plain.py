@@ -1,16 +1,4 @@
-def format_value(value):
-    if isinstance(value, dict):
-        return "[complex value]"
-    elif isinstance(value, str):
-        return f"'{value}'"
-    elif isinstance(value, bool):
-        if value is True:
-            return "true"
-        else:
-            return "false"
-    elif value is None:
-        return "null"
-    return value
+from gendiff.core.comparator import format_value
 
 
 def stringify(difference: dict) -> str:

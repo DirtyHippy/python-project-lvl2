@@ -10,6 +10,21 @@ result: Dict[str, dict]
 result = {REMOVED: {}, UPDATED: {}, ADDED: {}, EQUAL: {}}
 
 
+def format_value(value):
+    if isinstance(value, dict):
+        return "[complex value]"
+    elif isinstance(value, str):
+        return f"'{value}'"
+    elif isinstance(value, bool):
+        if value is True:
+            return "true"
+        else:
+            return "false"
+    elif value is None:
+        return "null"
+    return value
+
+
 def compare_dictionaries(dict_1: dict,  # noqa: C901
                          dict_2: dict,
                          path="") -> Dict[str, dict]:

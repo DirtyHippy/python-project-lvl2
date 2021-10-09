@@ -42,7 +42,8 @@ def test_nested(file1, file2):
 '''
 
 
-@pytest.mark.parametrize("file1, file2", [(nested_json1, nested_json2)])
+@pytest.mark.parametrize("file1, file2", [(nested_json1, nested_json2),
+                                          (nested_yml1, nested_yml2)])
 def test_nested_plain_format(file1, file2):
     assert nested_expected_value_plain_format == generate_diff(
         file1, file2, 'plain')
