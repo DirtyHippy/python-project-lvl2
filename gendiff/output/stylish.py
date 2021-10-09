@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from typing import Dict, Any
 
 
 def format_value(value):
@@ -46,7 +47,7 @@ def get_sorted_keys(difference: dict) -> list:
     return list_keys
 
 
-def create_dict_format(difference: dict) -> dict:  # noqa: C901
+def create_dict_format(difference: dict):  # noqa: C901
     result = OrderedDict()
     list_keys = get_sorted_keys(difference)
     for key in list_keys:
@@ -91,3 +92,5 @@ def get_sign_and_value(difference: dict, key: tuple) -> tuple:
         return "-", updated[key]["orig_value"], "+", updated[key]["new_value"]
     elif key in equal:
         return "", equal[key], '', ''
+    else:
+        raise Exception("wrong key")

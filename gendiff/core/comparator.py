@@ -10,7 +10,7 @@ EQUAL = 'equal'
 def compare_dictionaries(dict_1: dict,  # noqa: C901
                          dict_2: dict,
                          ) -> Dict[str, dict]:
-
+    result: dict
     result = {REMOVED: {}, UPDATED: {}, ADDED: {}, EQUAL: {}}
 
     def inner(dict_1, dict_2, path=()):
