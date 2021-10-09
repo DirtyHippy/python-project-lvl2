@@ -18,7 +18,7 @@ def format(difference: dict) -> str:
     return stringify(create_dict_format(difference))
 
 
-def stringify(value, replacer='  ', spaces_count=1):
+def stringify(value, replacer='    ', spaces_count=1):
     def inner(inner_value, counter):
         result = ''
         if not isinstance(inner_value, dict):
@@ -27,8 +27,11 @@ def stringify(value, replacer='  ', spaces_count=1):
             result += "{\n"
             deep_size = spaces_count + counter
             for key, val in inner_value.items():
-                result += replacer * (deep_size - 1) + \
+                temp = replacer * (deep_size - 1) + \
                     "{}: {}".format(key, inner(val, deep_size)) + "\n"
+                if key.startswith("+") or key.startswith("-"):
+                    temp = temp[2:]
+                result += temp
             result += replacer * (counter - 1) + "}"
         return result
     return inner(value, 1)
@@ -56,8 +59,8 @@ def create_dict_format(difference: dict) -> dict:  # noqa: C901
             if counter == len(key):
                 sign, value, second_sigh, second_value = get_sign_and_value(
                     difference, key)
-                el2 = f"{second_sigh} {el}"
-                el = f"{sign} {el}"
+                el2 = f"{second_sigh} {el}" if second_sigh != '' else f"{el}"
+                el = f"{sign} {el}" if sign != '' else f"{el}"
                 value = format_value(value)
                 second_value = format_value(second_value)
             if prev is None:
@@ -87,4 +90,4 @@ def get_sign_and_value(difference: dict, key: tuple) -> tuple:
     elif key in updated:
         return "-", updated[key]["orig_value"], "+", updated[key]["new_value"]
     elif key in equal:
-        return " ", equal[key], '', ''
+        return "", equal[key], '', ''
