@@ -26,10 +26,10 @@ def load_files(file1: str, file2: str, load_func) -> Tuple[dict, dict]:
 
 def show_diff(difference: dict, format: str) -> str:
     if format == 'plain':
-        return plain.stringify(difference)
+        return plain.format(difference)
     elif format == 'json':
-        return json.stringify(difference)
-    return stylish.stringify(difference)
+        return json.format(difference)
+    return stylish.format(difference)
 
 
 def generate_diff(file1: str, file2: str, format='') -> Union[str, None]:

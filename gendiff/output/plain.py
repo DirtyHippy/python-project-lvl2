@@ -1,12 +1,24 @@
-from gendiff.core.comparator import format_value
+def format_value(value):
+    if isinstance(value, dict):
+        return "[complex value]"
+    elif isinstance(value, str):
+        return f"'{value}'"
+    elif isinstance(value, bool):
+        if value is True:
+            return "true"
+        else:
+            return "false"
+    elif value is None:
+        return "null"
+    return value
 
 
-def stringify(difference: dict) -> str:  # noqa: C901
+def format(difference: dict) -> str:  # noqa: C901
     result = []
     for diff_key, diff_value in difference.items():
         for key, val in diff_value.items():
             line = ''
-            key = key.replace("][", '.').replace("]", "").replace("[", "")
+            key = ".".join(key)
             if diff_key == "added":
                 line = f"'{key}' was {diff_key} with value: {format_value(val)}"
             elif diff_key == "removed":

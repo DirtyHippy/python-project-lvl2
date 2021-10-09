@@ -6,31 +6,16 @@ UPDATED = 'updated'
 ADDED = 'added'
 EQUAL = 'equal'
 
-result: Dict[str, dict]
 result = {REMOVED: {}, UPDATED: {}, ADDED: {}, EQUAL: {}}
-
-
-def format_value(value):
-    if isinstance(value, dict):
-        return "[complex value]"
-    elif isinstance(value, str):
-        return f"'{value}'"
-    elif isinstance(value, bool):
-        if value is True:
-            return "true"
-        else:
-            return "false"
-    elif value is None:
-        return "null"
-    return value
 
 
 def compare_dictionaries(dict_1: dict,  # noqa: C901
                          dict_2: dict,
-                         path="") -> Dict[str, dict]:
+                         path=()) -> Dict[str, dict]:
+
     orig_path = path
     for k in dict_1.keys():
-        path = orig_path + f"[{k}]"
+        path = orig_path + (k,)
         if k not in dict_2:
             result[REMOVED][path] = dict_1[k]
         else:
@@ -43,7 +28,7 @@ def compare_dictionaries(dict_1: dict,  # noqa: C901
                 else:
                     result[EQUAL][path] = dict_1[k]
     for k in dict_2.keys():
-        path = orig_path + f"[{k}]"
+        path = orig_path + (k,)
         if k not in dict_1:
             result[ADDED][path] = dict_2[k]
     return result
