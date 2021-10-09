@@ -1,7 +1,7 @@
 from gendiff.core.comparator import format_value
 
 
-def stringify(difference: dict) -> str:
+def stringify(difference: dict) -> str:  # noqa: C901
     result = []
     for diff_key, diff_value in difference.items():
         for key, val in diff_value.items():
