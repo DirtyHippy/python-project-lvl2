@@ -3,4 +3,4 @@ import json
 
 
 def format(difference: dict) -> str:
-    return json.dumps(create_dict_format(difference), indent=4, sort_keys=True)
+    return json.dumps(create_dict_format(difference))
