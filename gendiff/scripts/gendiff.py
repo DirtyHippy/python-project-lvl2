@@ -29,10 +29,13 @@ def show_diff(difference: dict, format: str) -> str:
         return plain.format(difference)
     elif format == 'json':
         return json.format(difference)
-    return stylish.format(difference)
+    elif format == 'stylish':
+        return stylish.format(difference)
+    else:
+        raise Exception("wrong format")
 
 
-def generate_diff(file1: str, file2: str, format='') -> Union[str, None]:
+def generate_diff(file1: str, file2: str, format='stylish') -> Union[str, None]:
     if file1.endswith(".json"):
         difference = compare_dictionaries(
             *load_files(file1, file2, load))
