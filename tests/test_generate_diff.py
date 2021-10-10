@@ -46,3 +46,15 @@ def test_nested(file1, file2):
 def test_nested_plain_format(file1, file2):
     assert nested_expected_value_plain_format == generate_diff(
         file1, file2, 'plain')
+
+
+nested1_test2 = get_fixture_path('nested1_test2.json')
+nested2_test2 = get_fixture_path('nested2_test2.json')
+nested_expected_value_plain_format_test2 = read(
+    get_fixture_path('nested_plain_test2.txt'))
+
+
+@pytest.mark.parametrize("file1, file2", [(nested1_test2, nested2_test2)])
+def test_nested_plain_format2(file1, file2):
+    assert nested_expected_value_plain_format_test2 == generate_diff(
+        file1, file2, 'plain')

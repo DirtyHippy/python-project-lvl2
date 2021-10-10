@@ -29,6 +29,6 @@ def format(difference: dict) -> str:  # noqa: C901
                 line = f"'{key}' was {diff_key}. From {orig} to {new}"
             if line:
                 result.append(line)
-            result.sort()
+    result.sort()
     result = map(lambda line: 'Property ' + line, result)  # type: ignore
     return '\n'.join(result)
