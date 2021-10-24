@@ -1,6 +1,6 @@
-from gendiff.generator import generate_diff
 import os
 import pytest
+from gendiff.generator import PLAIN, STYLISH, generate_diff
 
 
 def get_fixture_path(file_name):
@@ -14,35 +14,38 @@ def read(file_path):
     return result
 
 
+@pytest.fixture
+def simple_expected_value():
+    return read(get_fixture_path('simple_stylish.txt'))
+
+
+@pytest.fixture
+def nested_expected_value():
+    return read(get_fixture_path('nested_stylish.txt'))
+
+
+@pytest.fixture
+def nested_expected_value_plain_format():
+    return read(get_fixture_path('nested_plain.txt'))
+
+
 simple_json1 = get_fixture_path('simple1.json')
 simple_json2 = get_fixture_path('simple2.json')
 simple_yml1 = get_fixture_path('simple1.yml')
 simple_yml2 = get_fixture_path('simple2.yml')
-simple_expected_value = read(get_fixture_path('simple_stylish.txt'))
 
 
 nested_json1 = get_fixture_path('nested1.json')
 nested_json2 = get_fixture_path('nested2.json')
 nested_yml1 = get_fixture_path('nested1.yaml')
 nested_yml2 = get_fixture_path('nested2.yaml')
-nested_expected_value = read(get_fixture_path('nested_stylish.txt'))
-nested_expected_value_plain_format = read(get_fixture_path('nested_plain.txt'))
 
 
-@pytest.mark.parametrize("file1, file2", [(simple_json1, simple_json2),
-                                          (simple_yml1, simple_yml2)])
-def test_plain(file1, file2):
-    assert simple_expected_value == generate_diff(file1, file2)
-
-
-@pytest.mark.parametrize("file1, file2", [(nested_json1, nested_json2),
-                                          (nested_yml1, nested_yml2)])
-def test_nested(file1, file2):
-    assert nested_expected_value == generate_diff(file1, file2)
-
-
-@pytest.mark.parametrize("file1, file2", [(nested_json1, nested_json2),
-                                          (nested_yml1, nested_yml2)])
-def test_nested_plain_format(file1, file2):
-    assert nested_expected_value_plain_format == generate_diff(
-        file1, file2, 'plain')
+@pytest.mark.parametrize("file1, file2, fixture, format", [(simple_json1, simple_json2, 'simple_expected_value', STYLISH),                # noqa E501
+                                                           (simple_yml1, simple_yml2, 'simple_expected_value', STYLISH),                  # noqa E501
+                                                           (nested_json1, nested_json2, 'nested_expected_value', STYLISH),                # noqa E501
+                                                           (nested_yml1, nested_yml2, 'nested_expected_value', STYLISH),                  # noqa E501
+                                                           (nested_json1, nested_json2, 'nested_expected_value_plain_format', PLAIN),     # noqa E501
+                                                           (nested_yml1, nested_yml2, 'nested_expected_value_plain_format', PLAIN)])      # noqa E501
+def test_1(file1, file2, fixture, format, request):
+    assert request.getfixturevalue(fixture) == generate_diff(file1, file2, format)
