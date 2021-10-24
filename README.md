@@ -13,8 +13,10 @@
 ```bash 
 pip install git+https://github.com/DirtyHippy/python-project-lvl2.git
 ```
+[![asciicast](https://asciinema.org/a/Ih7jeaHGhZVJt7SiVshnUvlSl.svg)](https://asciinema.org/a/Ih7jeaHGhZVJt7SiVshnUvlSl)
 
 ## Usage Difference generator
-
-Launching: gendiff
-[![asciicast](https://asciinema.org/a/A1O3HcNIlYNfVX5s2uIOAU7ZY.svg)](https://asciinema.org/a/A1O3HcNIlYNfVX5s2uIOAU7ZY)
+```bash 
+gendiff -h
+```
+[![asciicast](https://asciinema.org/a/s6HmeNCm2nPRhEkHuKH32xVks.svg)](https://asciinema.org/a/s6HmeNCm2nPRhEkHuKH32xVks)

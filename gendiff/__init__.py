@@ -1,4 +1,4 @@
-from gendiff.scripts.gendiff import generate_diff
+from gendiff.generator import generate_diff
 
 __all__ = (  # noqa: WPS410
     'generate_diff',
