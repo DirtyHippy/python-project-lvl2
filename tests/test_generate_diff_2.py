@@ -14,12 +14,10 @@ def read(file_path):
     return result
 
 
-@pytest.fixture
 def nested_expected_value():
     return read(get_fixture_path('nested_stylish.txt'))
 
 
-@pytest.fixture
 def nested_expected_value_plain_format():
     return read(get_fixture_path('nested_plain.txt'))
 
@@ -30,9 +28,9 @@ nested_yml1 = get_fixture_path('nested1.yml')
 nested_yml2 = get_fixture_path('nested2.yml')
 
 
-@pytest.mark.parametrize("file1, file2, fixture, format", [(nested_json1, nested_json2, 'nested_expected_value', STYLISH),               # noqa E501
-                                                           (nested_yml1, nested_yml2, 'nested_expected_value', STYLISH),                 # noqa E501
-                                                           (nested_json1, nested_json2, 'nested_expected_value_plain_format', PLAIN),    # noqa E501
-                                                           (nested_yml1, nested_yml2, 'nested_expected_value_plain_format', PLAIN)])     # noqa E501
-def test_2(file1, file2, fixture, format, request):
-    assert request.getfixturevalue(fixture) == generate_diff(file1, file2, format)
+@ pytest.mark.parametrize("file1, file2, test_function, format", [(nested_json1, nested_json2, nested_expected_value, STYLISH),                # noqa E501
+                                                                  (nested_yml1, nested_yml2, nested_expected_value, STYLISH),                  # noqa E501
+                                                                  (nested_json1, nested_json2, nested_expected_value_plain_format, PLAIN),     # noqa E501
+                                                                  (nested_yml1, nested_yml2, nested_expected_value_plain_format, PLAIN)])      # noqa E501
+def test_generate_diff(file1, file2, test_function, format):
+    assert test_function() == generate_diff(file1, file2, format)

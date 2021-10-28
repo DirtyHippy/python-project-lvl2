@@ -1,5 +1,5 @@
 import itertools
-from gendiff.comparator import REMOVED, UPDATED, ADDED, EQUAL
+from gendiff.comparator import REMOVED, UPDATED, ADDED, EQUAL, DICT
 from typing import Dict
 
 
@@ -10,31 +10,23 @@ signs = {
     UPDATED: '- '
 }
 
-
-def to_stylish_format(diff_dict: dict, replacer='    ', spaces_count=1) -> str:
-    def inner(current_value, depth):
-        if not isinstance(current_value, dict):
-            return str(current_value)
-
-        deep_indent_size = depth + spaces_count
-        deep_indent = replacer * deep_indent_size
-        current_indent = replacer * depth
-        lines = []
-        for key, val in current_value.items():
-            line = f'{deep_indent}{key}: {inner(val, deep_indent_size)}'
-            if key[:2] in signs.values():
-                line = line[2:]
-            lines.append(line)
-        result = itertools.chain("{", lines, [current_indent + "}"])
-        return '\n'.join(result)
-    return inner(diff_dict, 0)
+indent = '    '
+indent_sign = '  '
 
 
-def format_key(key: str, diff_type: str) -> str:
-    return f'{signs[diff_type]}{key}'
+def format_dict(dict_value: dict, depth: int) -> str:
+    lines = []
+    for key, value in dict_value.items():
+        lines.append(format_line(key, EQUAL, format_value(value, depth + 1), depth))
+    result = itertools.chain("{", lines, [indent * depth + "}"])
+    return '\n'.join(result)
 
 
-def format_value(value):
+def format_line(key: str, diff_type: str, value, depth: int) -> str:
+    return f"{indent * depth}{indent_sign}{signs[diff_type]}{key}: {value}"
+
+
+def format_value(value, depth: int):
     if isinstance(value, str):
         return f"{value}"
     elif value is True:
@@ -43,22 +35,26 @@ def format_value(value):
         return "false"
     elif value is None:
         return "null"
+    elif isinstance(value, dict):
+        return format_dict(value, depth)
     return value
 
 
-def create_dict_from_diff(difference: Dict[str, list]) -> dict:
-    result = {}
+def to_stylish_format(difference: Dict[str, list], depth: int = 0) -> str:
+    lines = []
     for key in sorted(difference.keys()):
         diff_type, first_value, second_value = difference[key]
-        if diff_type is None:
-            result[key] = create_dict_from_diff(first_value)
+        if diff_type == DICT:
+            lines.append(format_line(key, EQUAL, to_stylish_format(first_value, depth + 1), depth))
         else:
-            result[format_key(key, diff_type)] = format_value(first_value)
+            dict_depth = depth + 1 if isinstance(first_value, dict) else depth
+            lines.append(format_line(key, diff_type, format_value(first_value, dict_depth), depth))
             if diff_type == UPDATED:
-                result[format_key(key, ADDED)] = format_value(second_value)
-    return result
+                dict_depth = depth + 1 if isinstance(second_value, dict) else depth
+                lines.append(format_line(key, ADDED, format_value(second_value, dict_depth), depth))
+    result = itertools.chain("{", lines, [indent * depth + "}"])
+    return '\n'.join(result)
 
 
 def format(difference: Dict[str, list]) -> str:
-    diff_dict = create_dict_from_diff(difference)
-    return to_stylish_format(diff_dict)
+    return to_stylish_format(difference)

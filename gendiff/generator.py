@@ -11,16 +11,15 @@ PLAIN = 'plain'
 JSON = 'json'
 
 
-def load_file(file: str) -> dict:
-    file_ext = os.path.splitext(file)[1].lower()
-    if file_ext == ".json":
-        with open(file, "r") as f:
+def load_file(file_path: str) -> dict:
+    file_ext = os.path.splitext(file_path)[1].lower()
+    with open(file_path, "r") as f:
+        if file_ext == ".json":
             return load(f)
-    elif file_ext == ".yml" or file_ext == ".yaml":
-        with open(file, "r") as f:
+        elif file_ext == ".yml" or file_ext == ".yaml":
             return safe_load(f)
-    else:
-        raise Exception("wrong data format")
+        else:
+            raise Exception("wrong data format")
 
 
 def get_diff(difference: Dict[str, list], format: str) -> str:
@@ -34,6 +33,6 @@ def get_diff(difference: Dict[str, list], format: str) -> str:
         raise Exception("wrong format")
 
 
-def generate_diff(file1: str, file2: str, format=STYLISH) -> str:
-    difference = compare_dictionaries(load_file(file1), load_file(file2))
+def generate_diff(file_path1: str, file_path2: str, format=STYLISH) -> str:
+    difference = compare_dictionaries(load_file(file_path1), load_file(file_path2))
     return get_diff(difference, format)
