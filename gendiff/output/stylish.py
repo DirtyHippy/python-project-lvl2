@@ -47,11 +47,9 @@ def to_stylish_format(difference: Dict[str, list], depth: int = 0) -> str:
         if diff_type == DICT:
             lines.append(format_line(key, EQUAL, to_stylish_format(first_value, depth + 1), depth))
         else:
-            dict_depth = depth + 1 if isinstance(first_value, dict) else depth
-            lines.append(format_line(key, diff_type, format_value(first_value, dict_depth), depth))
+            lines.append(format_line(key, diff_type, format_value(first_value, depth + 1), depth))
             if diff_type == UPDATED:
-                dict_depth = depth + 1 if isinstance(second_value, dict) else depth
-                lines.append(format_line(key, ADDED, format_value(second_value, dict_depth), depth))
+                lines.append(format_line(key, ADDED, format_value(second_value, depth + 1), depth))
     result = itertools.chain("{", lines, [indent * depth + "}"])
     return '\n'.join(result)
 
